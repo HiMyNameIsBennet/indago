@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        attribute vec2 position;
+
+        uniform vec2 scale;
+        uniform vec2 rotation;
+        
+        void main() {
+            vec2 rotPosition = vec2(
+                position.x * rotation.y +
+                position.y * rotation.x,
+                position.y * rotation.y -
+                position.x * rotation.x
+            );
+
+            gl_Position = vec4(rotPosition * scale, 0.0, 1.0);
+        }
+    </script>
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        #ifdef GL_ES
+            precision highp float;
+        #endif
+
+        uniform vec4 color;
+
+        void main() {
+            gl_FragColor = color;
+        }
+    </script>
+    
+    <title>indago</title>
+</head>
+<body>
+    <div id="wrapper">
+        <canvas id="glcanvas" width="1600" height="900">
+            Oh no! Your browser doesn't support canvas!
+        </canvas>
+    </div>
+    <script src="../engine/engine.js"></script>
+</body>
+</html>
