@@ -6,7 +6,8 @@ let current_rotation
 let current_scale
 let current_angle
 
-let vtxArray
+let vtxArray = []
+let vtxTotalLength = 0
 let vtxBuffer
 let vtxNumComponents
 let vtxCount
@@ -17,7 +18,7 @@ let position
 let rotation
 
 let delta_time = 0.0
-let degPerSecond = 90.0
+let degPerSecond = -90.0
 
 
 const startup = () => {
@@ -41,23 +42,27 @@ const startup = () => {
     current_rotation = [0, 1]
     current_scale = [0.5, aspect_ratio/2]
 
-    vtxArray = new Float32Array([
+    vtxArray[0] = new Float32Array([
         -.5, .35, -.25, .5, 0, .35,
         0, .35, .25, .5, .5, .35,
         -.5, .35, 0, .35, 0, 0,
         0, .35, .5, .35, 0, 0,
         -.5, .35, -.5, 0, 0, 0,
         .5, .35, .5, 0, 0, 0,
-        0, 0, -.5, 0, 0, -.35,
-        0, 0, .5, 0, 0, -.35
+        0, 0, -.5, 0, 0, -.3,
+        0, 0, .5, 0, 0, -.3
     ])
 
     vtxBuffer = gl.createBuffer()
     gl.bindBuffer(gl.ARRAY_BUFFER, vtxBuffer)
-    gl.bufferData(gl.ARRAY_BUFFER, vtxArray, gl.STATIC_DRAW)
+    vtxArray.forEach(elem => {
+        gl.bufferData(gl.ARRAY_BUFFER, elem, gl.STATIC_DRAW)
+        vtxTotalLength += elem.length
+    })
 
     vtxNumComponents = 2
-    vtxCount = vtxArray.length/vtxNumComponents
+
+    vtxCount = vtxTotalLength/vtxNumComponents
 
     current_angle = 0.0
 
