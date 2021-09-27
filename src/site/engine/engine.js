@@ -19,6 +19,8 @@ let rotation
 let transform
 
 let delta_time = 0.0
+let measure_time = 0.0
+let measure_frame = 0
 let degPerSecond = 130.0
 
 let test
@@ -118,8 +120,6 @@ const animateScene = () => {
     test2.transform(Math.sin(test2.radians)/50, 0)
     test.transform(0, Math.cos(test.radians)/75)
 
-    console.log(test2.position)
-
     gl.useProgram(shaderProg)
 
     scale = gl.getUniformLocation(shaderProg, "scale")
@@ -149,6 +149,13 @@ const animateScene = () => {
         let delta_angle = ((current_time - delta_time) / 1000.0) * degPerSecond
         test.rotate(-delta_angle)
         test2.rotate(2*delta_angle)
+
+        if(current_time - measure_time >= 1000){
+            console.log(measure_frame)
+            measure_time = current_time
+            measure_frame = 0
+        }
+        measure_frame++
 
         delta_time = current_time
         animateScene()
