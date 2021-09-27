@@ -20,7 +20,7 @@
                 position.x * rotation.x
             );
 
-            gl_Position = vec4((rotPosition + transform) * scale, 0.0, 1.0);
+            gl_Position = vec4(rotPosition * scale + transform, 0.0, 1.0);
         }
     </script>
     <script id="fragment-shader" type="x-shader/x-fragment">

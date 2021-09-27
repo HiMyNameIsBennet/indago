@@ -19,9 +19,10 @@ let rotation
 let transform
 
 let delta_time = 0.0
-let degPerSecond = 90.0
+let degPerSecond = 130.0
 
 let test
+let test2
 
 vtxArray[0] = new Float32Array([
     -.5, .35, -.25, .5, 0, .35,
@@ -57,8 +58,9 @@ const startup = () => {
     current_scale = [0.5, aspect_ratio/2]
     current_angle = 0.0
 
-    test = new RenderObject([1, 0], current_scale, current_angle, current_rotation, vtxArray[0])
-    
+    test = new RenderObject([0.5, 0], current_scale, 0, [1, 0], vtxArray[0])
+    test2 = new RenderObject([-0.5, 0], [0.25, current_scale[1]/2], 0, [1, 0], vtxArray[0])
+
     vtxBuffer = gl.createBuffer()
     gl.bindBuffer(gl.ARRAY_BUFFER, vtxBuffer)
 
@@ -111,6 +113,7 @@ const animateScene = () => {
     gl.clear(gl.COLOR_BUFFER_BIT)
 
     test.radians = test.angle * Math.PI / 180.0
+    test2.radians = test2.angle * Math.PI / 180.0
 
     gl.useProgram(shaderProg)
 
@@ -118,24 +121,31 @@ const animateScene = () => {
     color = gl.getUniformLocation(shaderProg, "color")
     rotation = gl.getUniformLocation(shaderProg, "rotation")
     transform = gl.getUniformLocation(shaderProg, "transform")
-    
-    gl.uniform2fv(scale, test.scale)
-    gl.uniform2fv(rotation, test.rotation)
-    gl.uniform4fv(color, [0.1, 0.7, 0.2, 1.0])
-    gl.uniform2fv(transform, test.position)
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, vtxBuffer)
 
     position = gl.getAttribLocation(shaderProg, "position")
 
     gl.enableVertexAttribArray(position)
     gl.vertexAttribPointer(position, vtxNumComponents, gl.FLOAT, false, 0, 0)
 
+    gl.uniform2fv(scale, test.scale)
+    gl.uniform2fv(rotation, test.rotation)
+    gl.uniform4fv(color, [0.1, 0.7, 0.2, 1.0])
+    gl.uniform2fv(transform, test.position)
     gl.drawArrays(gl.TRIANGLES, 0, vtxCount)
+
+    gl.uniform2fv(scale, test2.scale)
+    gl.uniform2fv(rotation, test2.rotation)
+    gl.uniform4fv(color, [0.1, 0.2, 0.7, 1.0])
+    gl.uniform2fv(transform, test2.position)
+    gl.drawArrays(gl.TRIANGLES, 0, vtxCount)
+
 
     window.requestAnimationFrame(current_time => {
         let delta_angle = ((current_time - delta_time) / 1000.0) * degPerSecond
-        test.rotate(delta_angle)
+        test.rotate(-delta_angle)
+        test2.rotate(2*delta_angle)
+
+        console.log([test.angle, test2.angle])
 
         delta_time = current_time
         animateScene()
