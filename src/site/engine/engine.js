@@ -18,7 +18,7 @@ let position
 let rotation
 
 let delta_time = 0.0
-let degPerSecond = -90.0
+let degPerSecond = 90.0
 
 let test
 
@@ -52,7 +52,7 @@ const startup = () => {
     shaderProg = buildShaderProgram(shaders)
 
     aspect_ratio = canvas.width/canvas.height
-    current_rotation = [0, 1]
+    current_rotation = [1, 0]
     current_scale = [0.5, aspect_ratio/2]
 
     
@@ -111,8 +111,6 @@ const animateScene = () => {
     gl.clear(gl.COLOR_BUFFER_BIT)
 
     test.radians = test.angle * Math.PI / 180.0
-    test.rotation[0] = Math.sin(test.radians)
-    test.rotation[1] = Math.cos(test.radians)
 
     gl.useProgram(shaderProg)
 
@@ -136,7 +134,9 @@ const animateScene = () => {
     window.requestAnimationFrame(current_time => {
         let delta_angle = ((current_time - delta_time) / 1000.0) * degPerSecond
 
-        test.angle = (test.angle + delta_angle) % 360
+        test.rotate(delta_angle)
+
+        console.log(test.angle)
 
         delta_time = current_time
         animateScene()

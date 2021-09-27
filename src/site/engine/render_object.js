@@ -7,4 +7,10 @@ class RenderObject {
         this.radians = angle * Math.PI / 180.0
         this.rotation = rotation
     }
+
+    rotate(angle) {
+        this.angle = (this.angle + angle) % 360
+        this.rotation[0] = Math.sin(this.angle * Math.PI / 180.0)
+        this.rotation[1] = Math.cos(this.angle * Math.PI / 180.0)
+    }
 }
