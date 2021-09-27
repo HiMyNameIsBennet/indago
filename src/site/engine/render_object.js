@@ -1,5 +1,4 @@
 class RenderObject {
-    
     constructor(position, scale, angle, rotation, vertices) {
         this.position = position
         this.scale = scale
