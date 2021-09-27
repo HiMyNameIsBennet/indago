@@ -20,6 +20,19 @@ let rotation
 let delta_time = 0.0
 let degPerSecond = -90.0
 
+let test
+
+vtxArray[0] = new Float32Array([
+    -.5, .35, -.25, .5, 0, .35,
+    0, .35, .25, .5, .5, .35,
+    -.5, .35, 0, .35, 0, 0,
+    0, .35, .5, .35, 0, 0,
+    -.5, .35, -.5, 0, 0, 0,
+    .5, .35, .5, 0, 0, 0,
+    0, 0, -.5, 0, 0, -.3,
+    0, 0, .5, 0, 0, -.3
+])
+
 
 const startup = () => {
     canvas = document.getElementById("glcanvas")
@@ -42,17 +55,7 @@ const startup = () => {
     current_rotation = [0, 1]
     current_scale = [0.5, aspect_ratio/2]
 
-    vtxArray[0] = new Float32Array([
-        -.5, .35, -.25, .5, 0, .35,
-        0, .35, .25, .5, .5, .35,
-        -.5, .35, 0, .35, 0, 0,
-        0, .35, .5, .35, 0, 0,
-        -.5, .35, -.5, 0, 0, 0,
-        .5, .35, .5, 0, 0, 0,
-        0, 0, -.5, 0, 0, -.3,
-        0, 0, .5, 0, 0, -.3
-    ])
-
+    
     vtxBuffer = gl.createBuffer()
     gl.bindBuffer(gl.ARRAY_BUFFER, vtxBuffer)
     vtxArray.forEach(elem => {
@@ -65,6 +68,8 @@ const startup = () => {
     vtxCount = vtxTotalLength/vtxNumComponents
 
     current_angle = 0.0
+    
+    test = new RenderObject([0,0], current_scale, current_angle, current_rotation, vtxArray[0])
 
     animateScene()
 }
@@ -105,9 +110,9 @@ const animateScene = () => {
     gl.clearColor(0.2, 0.2, 0.3, 1.0)
     gl.clear(gl.COLOR_BUFFER_BIT)
 
-    let rads = current_angle * Math.PI / 180.0
-    current_rotation[0] = Math.sin(rads)
-    current_rotation[1] = Math.cos(rads)
+    test.radians = test.angle * Math.PI / 180.0
+    test.rotation[0] = Math.sin(test.radians)
+    test.rotation[1] = Math.cos(test.radians)
 
     gl.useProgram(shaderProg)
 
@@ -115,8 +120,8 @@ const animateScene = () => {
     color = gl.getUniformLocation(shaderProg, "color")
     rotation = gl.getUniformLocation(shaderProg, "rotation")
     
-    gl.uniform2fv(scale, current_scale)
-    gl.uniform2fv(rotation, current_rotation)
+    gl.uniform2fv(scale, test.scale)
+    gl.uniform2fv(rotation, test.rotation)
     gl.uniform4fv(color, [0.1, 0.7, 0.2, 1.0])
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vtxBuffer)
@@ -131,7 +136,7 @@ const animateScene = () => {
     window.requestAnimationFrame(current_time => {
         let delta_angle = ((current_time - delta_time) / 1000.0) * degPerSecond
 
-        current_angle = (current_angle + delta_angle) % 360
+        test.angle = (test.angle + delta_angle) % 360
 
         delta_time = current_time
         animateScene()
