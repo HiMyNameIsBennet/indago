@@ -1,11 +1,12 @@
 class RenderObject {
-    constructor(position, scale, angle, rotation, vertices) {
+    constructor(position, scale, angle, rotation, color, vertices) {
         this.iPosition = position
         this.iScale = scale
         this.iAngle = angle
         this.iVertices = vertices
         this.iRadians = angle * Math.PI / 180.0
         this.iRotation = rotation
+        this.iColor = color
     }
 
     rotate(angle) {
