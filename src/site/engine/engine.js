@@ -116,7 +116,7 @@ const animateScene = () => {
     test2.radians = test2.angle * Math.PI / 180.0
 
     test2.transform(Math.sin(test2.radians)/50, 0)
-    test.transform(0, Math.cos(test.radians)/85)
+    test.transform(0, Math.cos(test.radians)/75)
 
     console.log(test2.position)
 
