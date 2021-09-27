@@ -59,7 +59,7 @@ const startup = () => {
     current_angle = 0.0
 
     test = new RenderObject([0.5, 0], current_scale, 0, [1, 0], vtxArray[0])
-    test2 = new RenderObject([-0.5, 0], [0.25, current_scale[1]/2], 0, [1, 0], vtxArray[0])
+    test2 = new RenderObject([-0.625, 0], [0.25, current_scale[1]/2], 0, [1, 0], vtxArray[0])
 
     vtxBuffer = gl.createBuffer()
     gl.bindBuffer(gl.ARRAY_BUFFER, vtxBuffer)
@@ -115,6 +115,11 @@ const animateScene = () => {
     test.radians = test.angle * Math.PI / 180.0
     test2.radians = test2.angle * Math.PI / 180.0
 
+    test2.transform(Math.sin(test2.radians)/50, 0)
+    test.transform(0, Math.cos(test.radians)/85)
+
+    console.log(test2.position)
+
     gl.useProgram(shaderProg)
 
     scale = gl.getUniformLocation(shaderProg, "scale")
@@ -144,8 +149,6 @@ const animateScene = () => {
         let delta_angle = ((current_time - delta_time) / 1000.0) * degPerSecond
         test.rotate(-delta_angle)
         test2.rotate(2*delta_angle)
-
-        console.log([test.angle, test2.angle])
 
         delta_time = current_time
         animateScene()
