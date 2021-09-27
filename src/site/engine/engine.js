@@ -16,6 +16,7 @@ let scale
 let color
 let position
 let rotation
+let transform
 
 let delta_time = 0.0
 let degPerSecond = 90.0
@@ -56,12 +57,13 @@ const startup = () => {
     current_scale = [0.5, aspect_ratio/2]
     current_angle = 0.0
 
-    test = new RenderObject([.3, .3], current_scale, current_angle, current_rotation, vtxArray[0])
+    test = new RenderObject([1, 0], current_scale, current_angle, current_rotation, vtxArray[0])
     
     vtxBuffer = gl.createBuffer()
     gl.bindBuffer(gl.ARRAY_BUFFER, vtxBuffer)
+
     vtxArray.forEach(elem => {
-        gl.bufferData(gl.ARRAY_BUFFER, test.vertices, gl.STATIC_DRAW)
+        gl.bufferData(gl.ARRAY_BUFFER, elem, gl.STATIC_DRAW)
         vtxTotalLength += elem.length
     })
 
@@ -115,10 +117,12 @@ const animateScene = () => {
     scale = gl.getUniformLocation(shaderProg, "scale")
     color = gl.getUniformLocation(shaderProg, "color")
     rotation = gl.getUniformLocation(shaderProg, "rotation")
+    transform = gl.getUniformLocation(shaderProg, "transform")
     
     gl.uniform2fv(scale, test.scale)
     gl.uniform2fv(rotation, test.rotation)
     gl.uniform4fv(color, [0.1, 0.7, 0.2, 1.0])
+    gl.uniform2fv(transform, test.position)
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vtxBuffer)
 

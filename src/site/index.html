@@ -10,6 +10,7 @@
 
         uniform vec2 scale;
         uniform vec2 rotation;
+        uniform vec2 transform;
         
         void main() {
             vec2 rotPosition = vec2(
@@ -19,7 +20,7 @@
                 position.x * rotation.x
             );
 
-            gl_Position = vec4(rotPosition * scale, 0.0, 1.0);
+            gl_Position = vec4((rotPosition + transform) * scale, 0.0, 1.0);
         }
     </script>
     <script id="fragment-shader" type="x-shader/x-fragment">
