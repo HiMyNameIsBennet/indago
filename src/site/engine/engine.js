@@ -114,11 +114,14 @@ const animateScene = () => {
     gl.clearColor(0.2, 0.2, 0.3, 1.0)
     gl.clear(gl.COLOR_BUFFER_BIT)
 
-    test.radians = test.angle * Math.PI / 180.0
-    test2.radians = test2.angle * Math.PI / 180.0
+    test.iRadians = test.iAngle * Math.PI / 180.0
+    test2.iRadians = test2.iAngle * Math.PI / 180.0
 
-    test2.transform(Math.sin(test2.radians)/50, 0)
-    test.transform(0, Math.cos(test.radians)/75)
+    test2.transform(Math.sin(test2.iRadians)/50, 0)
+    test.transform(0, Math.cos(test.iRadians)/75)
+
+    test.scale((((Math.sin(test.iRadians)/150) + 1) * (0.8 + 0.8) / (1 + 1) - 0.8))
+    test2.scale((((Math.cos(test2.iRadians)/200) + 1) * (0.8 + 0.8) / (1 + 1) - 0.8))
 
     gl.useProgram(shaderProg)
 
@@ -132,16 +135,16 @@ const animateScene = () => {
     gl.enableVertexAttribArray(position)
     gl.vertexAttribPointer(position, vtxNumComponents, gl.FLOAT, false, 0, 0)
 
-    gl.uniform2fv(scale, test.scale)
-    gl.uniform2fv(rotation, test.rotation)
+    gl.uniform2fv(scale, test.iScale)
+    gl.uniform2fv(rotation, test.iRotation)
     gl.uniform4fv(color, [0.1, 0.7, 0.2, 1.0])
-    gl.uniform2fv(transform, test.position)
+    gl.uniform2fv(transform, test.iPosition)
     gl.drawArrays(gl.TRIANGLES, 0, vtxCount)
 
-    gl.uniform2fv(scale, test2.scale)
-    gl.uniform2fv(rotation, test2.rotation)
+    gl.uniform2fv(scale, test2.iScale)
+    gl.uniform2fv(rotation, test2.iRotation)
     gl.uniform4fv(color, [0.1, 0.2, 0.7, 1.0])
-    gl.uniform2fv(transform, test2.position)
+    gl.uniform2fv(transform, test2.iPosition)
     gl.drawArrays(gl.TRIANGLES, 0, vtxCount)
 
 
