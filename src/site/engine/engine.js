@@ -54,22 +54,20 @@ const startup = () => {
     aspect_ratio = canvas.width/canvas.height
     current_rotation = [1, 0]
     current_scale = [0.5, aspect_ratio/2]
+    current_angle = 0.0
 
+    test = new RenderObject([.3, .3], current_scale, current_angle, current_rotation, vtxArray[0])
     
     vtxBuffer = gl.createBuffer()
     gl.bindBuffer(gl.ARRAY_BUFFER, vtxBuffer)
     vtxArray.forEach(elem => {
-        gl.bufferData(gl.ARRAY_BUFFER, elem, gl.STATIC_DRAW)
+        gl.bufferData(gl.ARRAY_BUFFER, test.vertices, gl.STATIC_DRAW)
         vtxTotalLength += elem.length
     })
 
     vtxNumComponents = 2
 
     vtxCount = vtxTotalLength/vtxNumComponents
-
-    current_angle = 0.0
-    
-    test = new RenderObject([0,0], current_scale, current_angle, current_rotation, vtxArray[0])
 
     animateScene()
 }
@@ -133,10 +131,7 @@ const animateScene = () => {
 
     window.requestAnimationFrame(current_time => {
         let delta_angle = ((current_time - delta_time) / 1000.0) * degPerSecond
-
         test.rotate(delta_angle)
-
-        console.log(test.angle)
 
         delta_time = current_time
         animateScene()
