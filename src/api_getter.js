@@ -19,5 +19,5 @@ const GetBlockData = async () => {
 }
 
 GetBlockData().then(data => {
-    fs.writeFileSync('src/tx_stream', data)
+    fs.writeFileSync('src/tx_stream.txt', data)
 })
