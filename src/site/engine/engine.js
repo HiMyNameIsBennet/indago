@@ -7,7 +7,6 @@ let current_scale
 let current_angle
 
 let vtxArray = []
-let vtxTotalLength = 0
 let vtxBuffer
 let vtxNumComponents = 2
 let vtxCount
@@ -71,12 +70,7 @@ const startup = () => {
 
     pillars.forEach(elem => {
         gl.bufferData(gl.ARRAY_BUFFER, elem.iVertices, gl.STATIC_DRAW)
-        vtxTotalLength += elem.iVertices.length
     })
-
-    vtxNumComponents = 2
-
-    vtxCount = vtxTotalLength/vtxNumComponents
 
     animateScene()
 }
@@ -114,9 +108,9 @@ const compileShader = (id, type) => {
 
 const draw = render_object => {
     gl.bufferData(gl.ARRAY_BUFFER, render_object.iVertices, gl.STATIC_DRAW)
-    vtxLength = render_object.iVertices.length
+    let vtxLength = render_object.iVertices.length
 
-    vtxCount = vtxTotalLength/vtxNumComponents
+    vtxCount = vtxLength/vtxNumComponents
 
     gl.uniform2fv(scale, render_object.iScale)
     gl.uniform2fv(rotation, render_object.iRotation)
