@@ -25,17 +25,6 @@ let degPerSecond = 130.0
 
 let pillars = []
 
-vtxArray[0] = new Float32Array([
-    -.5, .35, -.25, .5, 0, .35,
-    0, .35, .25, .5, .5, .35,
-    -.5, .35, 0, .35, 0, 0,
-    0, .35, .5, .35, 0, 0,
-    -.5, .35, -.5, 0, 0, 0,
-    .5, .35, .5, 0, 0, 0,
-    0, 0, -.5, 0, 0, -.3,
-    0, 0, .5, 0, 0, -.3
-])
-
 
 const startup = () => {
     canvas = document.getElementById("glcanvas")
@@ -156,7 +145,8 @@ const animateScene = () => {
     let i = 1
     pillars.forEach(elem => {
         draw(elem)
-        elem.rotate(4*i/pillars.length, 0)
+        elem.scale(0.1, elem.iScale[1])
+        elem.rotate(5 + 2*i/pillars.length, 0)
         i++
     })
 

@@ -20,9 +20,8 @@ class RenderObject {
         this.iPosition[1] += y
     }
 
-    scale(scale) {
-        let factor = (this.iScale[0] + scale) / this.iScale[0]
-        this.iScale[0] *= factor
-        this.iScale[1] *= factor
+    scale(x, y) {
+        this.iScale[0] = x
+        this.iScale[1] = y
     }
 }
