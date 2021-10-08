@@ -5,36 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="styles.css">
-    <script id="vertex-shader" type="x-shader/x-vertex">
-        attribute vec2 position;
-
-        uniform vec2 scale;
-        uniform vec2 rotation;
-        uniform vec2 transform;
-        
-        void main() {
-            vec2 rotPosition = vec2(
-                position.x * rotation.y +
-                position.y * rotation.x,
-                position.y * rotation.y -
-                position.x * rotation.x
-            );
-
-            gl_Position = vec4(rotPosition * scale + transform, 0.0, 1.0);
-        }
-    </script>
-    <script id="fragment-shader" type="x-shader/x-fragment">
-        #ifdef GL_ES
-            precision highp float;
-        #endif
-
-        uniform vec4 color;
-
-        void main() {
-            gl_FragColor = color;
-        }
-    </script>
-    
     <title>indago</title>
 </head>
 <body>
@@ -43,8 +13,13 @@
             Oh no! Your browser doesn't support canvas!
         </canvas>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.8.1/gl-matrix-min.js"></script>
     <script src="engine/render_object.js"></script>
     <script src="engine/vertex_processor.js"></script>
-    <script src="engine/engine.js"></script>
+    <script src="engine/shader_creator.js"></script>
+    <script src="engine/draw2D.js"></script>
+    <script src="engine/shaders/vtx_3d.js"></script>
+    <script src="engine/shaders/fgm_3d.js"></script>
+    <script src="engine/3D.js"></script>
 </body>
 </html>
