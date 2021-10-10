@@ -13,3 +13,32 @@ body {
     align-content: center;
     justify-content: center;
 }
+
+#copyright {
+    z-index: 0;
+    font-family: 'Montserrat', sans-serif;
+    width: 100%;
+    position: fixed;
+    bottom: 20px;
+    text-align: center;
+    color: #333;
+    font-size: 16px;
+}
+
+@media screen and (min-width: 768px) {
+    #copyright {
+      font-size: 22px;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    #copyright {
+      font-size: 26px;
+    }
+}
+
+@media screen and (min-width: 1921px) {
+    #copyright {
+      font-size: 30px;
+    }
+}

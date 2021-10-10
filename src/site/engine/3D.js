@@ -1,5 +1,5 @@
 const field_of_view = 45 * Math.PI / 180
-const pMatrix = mat4.create()
+const pMatrix = glMatrix.mat4.create()
 const zFar = 100.0
 const zNear = 0.1
 
@@ -95,7 +95,7 @@ const startup = () => {
 
 
     aspect = canvas.width / canvas.height
-    mat4.perspective(pMatrix, field_of_view, aspect, zNear, zFar)
+    glMatrix.mat4.perspective(pMatrix, field_of_view, aspect, zNear, zFar)
 
 
     shaderProg = buildShaderProgram(shaders)
@@ -148,10 +148,10 @@ const animateScene = () => {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
 
-    const mViewMatrix = mat4.create()
+    const mViewMatrix = glMatrix.mat4.create()
 
-    mat4.translate(mViewMatrix, mViewMatrix, [-0.0, 0.0, -6.0])
-    mat4.rotate(mViewMatrix, mViewMatrix, cube_rotation, [1, .75, .5])
+    glMatrix.mat4.translate(mViewMatrix, mViewMatrix, [-0.0, 0.0, -6.0])
+    glMatrix.mat4.rotate(mViewMatrix, mViewMatrix, cube_rotation, [1, .75, .5])
 
 
     gl.uniformMatrix4fv(projection_matrix, false, pMatrix)
