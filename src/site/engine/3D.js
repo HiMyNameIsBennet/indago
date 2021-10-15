@@ -11,8 +11,12 @@ let aspect
 let canvas
 let gl
 
-let projection_matrix
-let model_view_matrix
+let mvp_matrix
+
+let modelMatrix = glMatrix.mat4.create()
+let viewMatrix = glMatrix.mat4.create()
+let mvpMatrix = glMatrix.mat4.create()
+
 let vertex_position
 let vertex_color
 
@@ -56,10 +60,10 @@ const positions = [
 const face_colors = [
     [52/255,  238/255,  218/255,  1.0],
     [52/255,  238/255,  218/255,  1.0],
-    [18/255,  23/255,  23/255,  1.0],
-    [18/255,  23/255,  23/255,  1.0],
-    [18/255,  23/255,  23/255,  1.0],
-    [18/255,  23/255,  23/255,  1.0],
+    [52/255,  238/255,  218/255,  1.0],
+    [235/255,  248/255,  175/255,  1.0],
+    [235/255,  248/255,  175/255,  1.0],
+    [235/255,  248/255,  175/255,  1.0]
 ]
 
 const indices = [
@@ -71,14 +75,18 @@ const indices = [
     20, 21, 22,     20, 22, 23
 ]
 
-let colors = [];
-  for (let j = 0; j < face_colors.length; j++) {
-    let c = face_colors[j];
-    colors = colors.concat(c, c, c, c);
+let colors = []
+for (let j = 0; j < 4; j++) {
+    for (let i = 0; i < face_colors.length; i++) {
+        colors = colors.concat(face_colors[i])
+    }
 }
 
 
-const startup = () => {
+let cube
+
+
+const init = () => {
     canvas = document.getElementById("glcanvas")
     gl = canvas.getContext("webgl")
 
@@ -104,27 +112,18 @@ const startup = () => {
     vertex_position = gl.getAttribLocation(shaderProg, 'aVertexPosition')
     vertex_color = gl.getAttribLocation(shaderProg, 'aVertexColor')
 
-    projection_matrix = gl.getUniformLocation(shaderProg, 'uProjectionMatrix')
-    model_view_matrix = gl.getUniformLocation(shaderProg, 'uModelViewMatrix')
-
-
-    position_buffer = gl.createBuffer()
-    gl.bindBuffer(gl.ARRAY_BUFFER, position_buffer)
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW)
-
-    color_buffer = gl.createBuffer()
-    gl.bindBuffer(gl.ARRAY_BUFFER, color_buffer)
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW)
-
-    index_buffer = gl.createBuffer()
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, index_buffer)
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW)
+    mvp_matrix = gl.getUniformLocation(shaderProg, 'mvpMatrix')
 
 
     gl.clearColor(0.0, 0.0, 0.0, 1.0)
     gl.clearDepth(1.0)
     gl.enable(gl.DEPTH_TEST)
     gl.depthFunc(gl.LEQUAL)
+
+
+    position_buffer = gl.createBuffer()
+    color_buffer = gl.createBuffer()
+    index_buffer = gl.createBuffer()
 
 
     gl.bindBuffer(gl.ARRAY_BUFFER, position_buffer)
@@ -134,10 +133,13 @@ const startup = () => {
     gl.bindBuffer(gl.ARRAY_BUFFER, color_buffer)
     gl.vertexAttribPointer(vertex_color, 4, gl.FLOAT, false, 0, 0)
     gl.enableVertexAttribArray(vertex_color)
-
     
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, index_buffer)
     gl.useProgram(shaderProg)
+
+
+    cube = new RenderObject(positions, colors, indices, modelMatrix)
+    glMatrix.mat4.translate(viewMatrix, viewMatrix, [0.0, 0.0, -5.0])
 
 
     animateScene()    
@@ -148,25 +150,18 @@ const animateScene = () => {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
 
-    const mViewMatrix = glMatrix.mat4.create()
-
-    glMatrix.mat4.translate(mViewMatrix, mViewMatrix, [-0.0, 0.0, -6.0])
-    glMatrix.mat4.rotate(mViewMatrix, mViewMatrix, cube_rotation, [1, .75, .5])
-
-
-    gl.uniformMatrix4fv(projection_matrix, false, pMatrix)
-    gl.uniformMatrix4fv(model_view_matrix, false, mViewMatrix)
-
-
-    gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0)
-
+    glMatrix.mat4.multiply(mvpMatrix, pMatrix, viewMatrix)
+    glMatrix.mat4.multiply(mvpMatrix, mvpMatrix, modelMatrix)
+    console.log(mvpMatrix)
+    cube.modelMatrix = mvpMatrix
+    draw(cube)
+    
+    glMatrix.mat4.rotate(modelMatrix, modelMatrix, 0.01, [1, 1, 1])
 
     window.requestAnimationFrame(current_time => {
-        cube_rotation = current_time / 1000
-
         animateScene()
     })
 }
 
 
-window.addEventListener("load", startup)
+window.addEventListener("load", init)

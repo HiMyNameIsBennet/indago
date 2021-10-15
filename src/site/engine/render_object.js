@@ -1,27 +1,24 @@
 class RenderObject {
-    constructor(position, scale, angle, rotation, color, vertices) {
-        this.iPosition = position
-        this.iScale = scale
-        this.iAngle = angle
-        this.iVertices = vertices
-        this.iRadians = angle * Math.PI / 180.0
-        this.iRotation = rotation
-        this.iColor = color
+    constructor(vertices, colors, indices, modelMatrix) {
+        this.vertices = vertices
+        this.colors = colors
+        this.indices = indices
+        this.modelMatrix = modelMatrix
     }
-
+/*
     rotate(angle) {
-        this.iAngle = (this.iAngle + angle) % 360
-        this.iRotation[0] = Math.sin(this.iAngle * Math.PI / 180.0)
-        this.iRotation[1] = Math.cos(this.iAngle * Math.PI / 180.0)
+        this.angle = (this.angle + angle) % 360
+        this.rotation[0] = Math.sin(this.angle * Math.PI / 180.0)
+        this.rotation[1] = Math.cos(this.angle * Math.PI / 180.0)
     }
 
     transform(x, y) {
-        this.iPosition[0] += x
-        this.iPosition[1] += y
+        this.position[0] += x
+        this.position[1] += y
     }
 
     scale(x, y) {
-        this.iScale[0] = x
-        this.iScale[1] = y
-    }
+        this.scale[0] = x
+        this.scale[1] = y
+    }*/
 }
